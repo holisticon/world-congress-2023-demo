@@ -1,6 +1,7 @@
 package de.holisticon.reactive.restclient;
 
 import de.holisticon.reactive.config.NonReactiveProperties;
+import de.holisticon.reactive.model.dto.CollectionItem;
 import de.holisticon.reactive.model.dto.SearchResult;
 import jakarta.annotation.PostConstruct;
 import lombok.NonNull;
@@ -42,12 +43,8 @@ public class NasaApiClient {
     @PostConstruct
     public void init() {
         final var ceres = getSearchResults("ceres");
-        final var size = ceres.getBody()
-                .collection()
-                .items()
-                .size();
-        log.info("received response: {}", size);
     }
+
     public ResponseEntity<SearchResult> getSearchResults(final String searchTerm) {
         return getSearchResults(searchTerm, null, null);
     }
@@ -55,13 +52,30 @@ public class NasaApiClient {
     public ResponseEntity<SearchResult> getSearchResults(final String searchTerm, final Long page, final Long pageSize) {
         final var queryParams = new LinkedMultiValueMap<String, String>();
         queryParams.add("q", searchTerm);
-        queryParams.add("page", Optional.ofNullable(page).orElse(1L).toString());
-        queryParams.add("page_size", Optional.ofNullable(pageSize).orElse(12L).toString());
-
+        final var nullSafePage = Optional.ofNullable(page)
+                .orElse(1L)
+                .toString();
+        queryParams.add("page", nullSafePage);
+        final var nullSafePageSize = Optional.ofNullable(pageSize)
+                .orElse(12L)
+                .toString();
+        queryParams.add("page_size", nullSafePageSize);
         //queryParams.add("api_key", properties.getApiKey());
-        final var url = buildUri(queryParams);
-        final var exchange = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(prepareHttpHeaders()), SearchResult.class);
-        return exchange;
+        final var apiResponse = restTemplate.exchange(buildUri(queryParams), HttpMethod.GET, new HttpEntity<>(prepareHttpHeaders()), SearchResult.class);
+        final var collection = apiResponse.getBody()
+                .collection();
+        final var size = collection
+                .items()
+                .size();
+        log.info("response size: {} / page number {} / page size {} / has next page: {}", size, nullSafePage, nullSafePageSize, hasNextPage(collection));
+        return apiResponse;
+    }
+
+    private boolean hasNextPage(CollectionItem collection) {
+        final var hasNext = collection.links()
+                .stream()
+                .anyMatch(l -> "next".equals(l.rel()));
+        return hasNext;
     }
 
     URI buildUri(final MultiValueMap<String, String> queryParams) {
