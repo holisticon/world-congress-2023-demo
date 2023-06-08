@@ -1,0 +1,14 @@
+word-congress-demo:
+  non-reactive:
+    nasa-api-schema: https
+    nasa-api-hostname: images-api.nasa.gov
+    nasa-api-search-endpoint: /search
+    nasa-api-asset-endpoint: /asset
+    nasa-api-captions-endpoint: /captions
+    nasa-api-album-endpoint: /album
+    api-key: ${API_KEY}
+
+logging:
+  level:
+    'org.springframework.web': TRACE
+
