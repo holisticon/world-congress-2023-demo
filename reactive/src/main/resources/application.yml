@@ -14,8 +14,7 @@ logging:
     'org.springframework.data': OFF
     'org.springframework.web': OFF
     'org.mongodb': OFF
-    'org.apache': OFF
-    'de.holisticon.nonreactive.Application': OFF
+    'de.holisticon.reactive.Application': OFF
 
 spring:
   data:

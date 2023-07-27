@@ -1,4 +1,4 @@
-package de.holisticon.reactive.model.dto;
+package de.holisticon.worldcongressdemo.model.dto;
 
 import java.util.List;
 

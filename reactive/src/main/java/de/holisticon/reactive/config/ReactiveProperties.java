@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "word-congress-demo.non-reactive")
 @Component
 @Data
-public class NonReactiveProperties {
+public class ReactiveProperties {
 
     private String nasaApiSchema;
     private String nasaApiHostname;

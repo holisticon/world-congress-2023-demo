@@ -1,4 +1,4 @@
-package de.holisticon.reactive.model.dto;
+package de.holisticon.worldcongressdemo.model.dto;
 
 public record Link(String href,
                    String rel,

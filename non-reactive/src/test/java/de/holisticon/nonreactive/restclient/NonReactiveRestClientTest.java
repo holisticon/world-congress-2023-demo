@@ -1,4 +1,4 @@
-package de.holisticon.reactive.restclient;
+package de.holisticon.nonreactive.restclient;
 
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.holisticon.reactive.model.dto.SearchResult;
+import de.holisticon.worldcongressdemo.model.dto.SearchResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,8 +22,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @ExtendWith(MockitoExtension.class)
-class NasaApiClientTest {
+class NonReactiveRestClientTest {
 
+
+    static String getTestdata(final String fileName) throws IOException {
+        final File file = new File(ClassLoader.getSystemClassLoader()
+                .getResource(fileName)
+                .getFile());
+        final BufferedReader br = new BufferedReader(new FileReader(file));
+        final StringBuilder stringBuilder = new StringBuilder();
+        String st;
+        while ((st = br.readLine()) != null) {
+            stringBuilder.append(st);
+        }
+        return stringBuilder.toString();
+    }
 
     @Test
     void testDataModel() throws IOException {
@@ -57,19 +70,6 @@ class NasaApiClientTest {
                         return super.nameForGetterMethod(config, method, defaultName);
                     }
                 });
-    }
-
-    static String getTestdata(final String fileName) throws IOException {
-        final File file = new File(ClassLoader.getSystemClassLoader()
-                .getResource(fileName)
-                .getFile());
-        final BufferedReader br = new BufferedReader(new FileReader(file));
-        final StringBuilder stringBuilder = new StringBuilder();
-        String st;
-        while ((st = br.readLine()) != null) {
-            stringBuilder.append(st);
-        }
-        return stringBuilder.toString();
     }
 
 }
